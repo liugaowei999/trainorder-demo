@@ -1,0 +1,9 @@
+com\ly\traffic\train\domain\order\repository\OrderRepository.class
+com\ly\traffic\train\infrastructure\FieldGenerateProcessor.class
+com\ly\traffic\train\RunApplication.class
+com\ly\traffic\train\domain\order\entity\TrainMainOrder.class
+com\ly\traffic\train\domain\order\vo\PassengerInfoVO.class
+com\ly\traffic\train\domain\order\vo\ClientInfoVO.class
+com\ly\traffic\train\domain\order\entity\OrderAggregate.class
+com\ly\traffic\train\infrastructure\GenerateField.class
+com\ly\traffic\train\infrastructure\TestAno.class
