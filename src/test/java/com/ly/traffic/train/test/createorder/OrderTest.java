@@ -9,16 +9,19 @@ import java.util.concurrent.TimeUnit;
 
 import com.google.common.collect.Lists;
 import com.ly.traffic.middleplatform.domain.createorder.entity.TripPassengerOrderInfo;
+import com.ly.traffic.middleplatform.domain.createorder.vo.BusTripInfoVO;
 import com.ly.traffic.middleplatform.domain.createorder.vo.TrainTripInfoVO;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.ly.traffic.middleplatform.domain.createorder.vo.TripInfoVO;
 import com.ly.traffic.train.domain.order.entity.OrderAggregate;
 import com.ly.traffic.train.domain.order.entity.TrainTripOrder;
 import com.ly.traffic.train.domain.order.entity.TrainTripPassengerOrder;
 import com.ly.traffic.train.domain.order.repository.OrderRepository;
 import com.ly.traffic.train.infrastructure.common.Result;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,8 +55,11 @@ public class OrderTest {
         System.out.println((end-start) + "ms");
     }
 
+    /**
+     * 创建火车票订单
+     */
     @Test
-    public void testCreateOrder() {
+    public void testCreateTrainOrder() {
         // 行程信息
         TrainTripInfoVO trainTripInfoVO = new TrainTripInfoVO();
         trainTripInfoVO.setTrainNo("G183");
@@ -173,6 +179,150 @@ public class OrderTest {
         mainOrder.setOrderNo("MD" + System.currentTimeMillis());
         mainOrder.setBb(5);
         mainOrder.setCc(99);
+
+
+//        orderRepository.save(mainOrder);
+        mainOrder.save();
+
+        System.out.println("ori:"+JSON.toJSONString(mainOrder));
+        System.out.println(mainOrder.toString());
+
+        try {
+            Thread.sleep(10000L);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    /**
+     * 创建汽车票订单
+     */
+    @Test
+    public void testCreateBusOrder() {
+        // 行程信息
+        BusTripInfoVO busTripInfoVO = new BusTripInfoVO();
+        busTripInfoVO.setFromCity("北京");
+        busTripInfoVO.setFromCityId(53);
+        busTripInfoVO.setToCityId(90);
+        busTripInfoVO.setToCity("天津");
+        busTripInfoVO.setStartLatlon("118.23,,23.9");
+        busTripInfoVO.setFromPlace("朝阳公园");
+        busTripInfoVO.setStartAddress("北京市朝阳区朝阳公园15号");
+        busTripInfoVO.setEndLatlon("118.746,,23.277");
+        busTripInfoVO.setToPlace("天津剧院");
+        busTripInfoVO.setEndAddress("天津市西区xxx街道xx号");
+        busTripInfoVO.setStartDateTime(new Date());
+        busTripInfoVO.setEndDateTime(DateUtils.addHours(new Date(),3));
+        busTripInfoVO.setBothTime("7260");
+        busTripInfoVO.setDepartureStation("朝阳站");
+        busTripInfoVO.setDepartureStationCode("AC123");
+        busTripInfoVO.setArrivalStation("天津站");
+        busTripInfoVO.setArrivalStationCode("TJ987");
+        busTripInfoVO.setScheduleNo("12");
+        busTripInfoVO.setBusNo("123");
+        busTripInfoVO.setTransportType("1");
+        busTripInfoVO.setScheduleId("542");
+        busTripInfoVO.setServiceChargeId(0);
+        busTripInfoVO.setServiceChargeType("");
+        busTripInfoVO.setRunningSchFlag(0);
+        busTripInfoVO.setCanRefund(0);
+        busTripInfoVO.setRefundBeforeDepart(0);
+        busTripInfoVO.setCreateDate(new Date());
+        busTripInfoVO.setCreateUser("");
+        busTripInfoVO.setUpdateDate(new Date());
+        busTripInfoVO.setUpdateUser("");
+
+
+
+        // 乘客信息
+        List<TripPassengerOrderInfo> tripPassengerOrderInfoList = new ArrayList<>();
+        TrainTripPassengerOrder tripPassengerOrderInfo1 = new TrainTripPassengerOrder();
+        tripPassengerOrderInfo1.setTicketFlag(0);
+        tripPassengerOrderInfo1.setPassengerName("汽车张三");
+        tripPassengerOrderInfo1.setPassengerType(1);
+        tripPassengerOrderInfo1.setCertificateType(1);
+        tripPassengerOrderInfo1.setCertificateNo("1102238494577383747");
+        tripPassengerOrderInfo1.setSex(0);
+        tripPassengerOrderInfo1.setSpecailInfo("汽车订单乘客1纬度扩展信息");
+        tripPassengerOrderInfoList.add(tripPassengerOrderInfo1);
+
+        TrainTripPassengerOrder tripPassengerOrderInfo2 = new TrainTripPassengerOrder();
+        tripPassengerOrderInfo2.setTicketFlag(0);
+        tripPassengerOrderInfo2.setPassengerName("汽车李四");
+        tripPassengerOrderInfo2.setPassengerType(1);
+        tripPassengerOrderInfo2.setCertificateType(1);
+        tripPassengerOrderInfo2.setCertificateNo("2102238494577383747");
+        tripPassengerOrderInfo2.setSex(0);
+        tripPassengerOrderInfo2.setSpecailInfo("汽车订单乘客2纬度扩展信息");
+        tripPassengerOrderInfoList.add(tripPassengerOrderInfo2);
+
+
+
+        // 行程订单信息
+        TrainTripOrder trainTripOrder = new TrainTripOrder();
+        trainTripOrder.setTripInfoVO(busTripInfoVO);
+        trainTripOrder.setTripPassengerOrderInfoList(tripPassengerOrderInfoList);
+        trainTripOrder.setIndexNo(0);
+        trainTripOrder.setOrderType(1);
+        trainTripOrder.setPayStatus(0);
+        trainTripOrder.setOrderStatus(1);
+        trainTripOrder.setTravelFlag(0);
+        trainTripOrder.setTicketUnitPrice(120.0D);
+        trainTripOrder.setTicketTotalPrice(240.0D);
+        trainTripOrder.setServiceUnitPrice(10.0D);
+        trainTripOrder.setServiceTotalPrice(20.0D);
+        trainTripOrder.setSupplierId("");
+        trainTripOrder.setUnionPay(0);
+        trainTripOrder.setPlanCode("汽车场景code");
+
+        // 营收商品
+        List<RevenueOrderInfo> revenueOrderInfoList = Lists.newArrayList();
+
+        // 权益消费申请信息
+        List<ResourceConsumerOrder> resourceConsumerOrderList = Lists.newArrayList();
+
+        OrderAggregate mainOrder = new OrderAggregate();
+        mainOrder.setPlatId(987);
+        mainOrder.setSourceType(10);
+        mainOrder.setMemberId(5365463);
+        mainOrder.setSupplierOrderNo("");
+        mainOrder.setCheckStatus(0);
+        mainOrder.setOrderStatus(0);
+        mainOrder.setMailStatus(0);
+        mainOrder.setPayStatus(0);
+        mainOrder.setContactName("汽车王五");
+        mainOrder.setContactPhone("13789287372");
+        mainOrder.setContactEmail("wangwu@qq.com");
+        mainOrder.setCustomerTotalAmount(260.0D);
+        mainOrder.setCustomerTotalPaid(0.0D);
+        mainOrder.setTicketTotalPrice(240.0D);
+        mainOrder.setReduceAmount(0.0D);
+        mainOrder.setDiscountAmount(0.0D);
+        mainOrder.setBookFlag(0);
+        mainOrder.setIssueFlag(0);
+        mainOrder.setPayMode(0);
+        mainOrder.setValidPayTime(new Date());
+        mainOrder.setPaymentType(0);
+        mainOrder.setUnionPay(0);
+        mainOrder.setDirectPay(0);
+        mainOrder.setProductType(0);
+        mainOrder.setRefId(123456);
+        mainOrder.setUnionId("USKDFJ-wejfksd");
+        mainOrder.setOpenId("Qjfsdjakfklsdafl");
+        mainOrder.setUserCreateDate(new Date());
+        mainOrder.setCreateDate(new Date());
+        mainOrder.setCreateUser("system");
+        mainOrder.setUpdateDate(new Date());
+        mainOrder.setUpdateUser("");
+        mainOrder.setTripOrderInfo(trainTripOrder);
+        mainOrder.setResourceConsumerOrderList(resourceConsumerOrderList);
+        mainOrder.setRevenueOrderInfoList(revenueOrderInfoList);
+
+        mainOrder.setTQueryKey("F3:");
+        mainOrder.setOrderNo("MD" + System.currentTimeMillis());
+        mainOrder.setBb(5);
 
 
 //        orderRepository.save(mainOrder);
