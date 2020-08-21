@@ -1,7 +1,11 @@
 package com.ly.traffic.train.domain.order.entity;
 
 import com.alibaba.fastjson.JSON;
+import com.ly.traffic.middleplatform.domain.createorder.entity.MainOrder;
+import com.ly.traffic.middleplatform.domain.createorder.repository.ICreateOrderRepository;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
@@ -11,30 +15,12 @@ import java.util.List;
  * @Description: ${TODO}
  * @date 2020/7/6 15:00
  */
-@Deprecated
-public class OrderAggregate  {
-    private String orderSerialId;
-//
-//    /**
-//     * 订单基本信息 & 客户端信息
-//     */
-//    private OrderBaseInfo orderBaseInfo;
-//    private ClientInfoVO clientInfo;
-
-
-
-    /**
-     * 优惠信息
-     */
-//    private List<DiscountInfo> discountInfoList;
-
-
-    public static void main(String[] args) {
-
-//        String jsonStr = "{\"orderBaseInfo\":{\"isOnlineTicket\":0,\"tQueryKey\":\"KEY1\",\"trainsformPurchaseStatus\":0,\"userName\":\"zhangsan\"},\"userTripInfoList\":[{\"bothTime\":0,\"fromCity\":\"北京\",\"fromCityPy\":\"beijing\"}]}";
-//        OrderAggregate orderAggregate1 = JSON.parseObject(jsonStr, OrderAggregate.class);
-         System.out.println("============================================");
-//        orderAggregate1.create();
-    }
+@Getter
+@Setter
+public class OrderAggregate  extends MainOrder implements ICreateOrderRepository {
+    private String tQueryKey;
+    private Integer aa;
+    private Integer bb;
+    private Integer cc;
 
 }

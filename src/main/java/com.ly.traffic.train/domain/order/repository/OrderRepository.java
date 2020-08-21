@@ -1,6 +1,6 @@
 package com.ly.traffic.train.domain.order.repository;
 
-import com.ly.traffic.middleplatform.domain.order.repository.IOrderRepository;
+import com.ly.traffic.middleplatform.domain.createorder.repository.ICreateOrderRepository;
 import org.springframework.stereotype.Service;
 
 /**
@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
  * @date 2020/8/11 10:01
  */
 @Service
-public class OrderRepository implements IOrderRepository {
+public class OrderRepository implements ICreateOrderRepository {
 
     public void save(Object obj) {
-        IOrderRepository.save(obj);
+        ICreateOrderRepository.save(obj);
     }
 }

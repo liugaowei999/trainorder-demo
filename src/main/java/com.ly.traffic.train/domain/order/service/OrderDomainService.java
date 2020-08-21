@@ -1,6 +1,6 @@
 package com.ly.traffic.train.domain.order.service;
 
-import com.ly.traffic.train.domain.order.entity.TrainMainOrder;
+import com.ly.traffic.train.domain.order.entity.OrderAggregate;
 import com.ly.traffic.train.domain.order.repository.OrderRepository;
 import com.ly.traffic.train.infrastructure.common.Result;
 import org.springframework.stereotype.Service;
@@ -19,9 +19,9 @@ public class OrderDomainService {
     private OrderRepository orderRepository;
 
     public Result createOrder(Object request) {
-        TrainMainOrder mainOrder = new TrainMainOrder();
+        OrderAggregate mainOrder = new OrderAggregate();
         mainOrder.setTQueryKey("C3:");
-        mainOrder.setOrderno("TR00022");
+        mainOrder.setOrderNo("TR00022");
         mainOrder.save();
 //        orderRepository.save(mainOrder);
 
