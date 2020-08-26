@@ -207,7 +207,7 @@ public class OrderTest {
 
 
 //        orderRepository.save(mainOrder);
-        mainOrder.save();
+        mainOrder.save(orderRepository);
 
         System.out.println("ori:"+JSON.toJSONString(mainOrder));
         System.out.println(mainOrder.toString());
@@ -351,7 +351,7 @@ public class OrderTest {
 
 
 //        orderRepository.save(mainOrder);
-        mainOrder.save();
+        mainOrder.save(orderRepository);
 
         System.out.println("ori:"+JSON.toJSONString(mainOrder));
         System.out.println(mainOrder.toString());
@@ -379,11 +379,30 @@ public class OrderTest {
     @Test
     public void payCallBackTest() throws InterruptedException {
         Map<String, Object> map = new HashMap<>();
-        map.put("mainOrderNo", "MD1598429083479");
+        map.put("mainOrderNo", "MD1598432595926");
         map.put("unionPayOrderNo", "Ukfdslal93849");
         map.put("paySerialNo", "12344sffed");
         TestSimulation.payCallBackTest(map);
 
         Thread.sleep(20000);
+    }
+
+    @Test
+    public void cancelOrderTest() throws InterruptedException {
+//        cancelOrder("MD1598000510484");
+        cancelOrder("MD1598003401236");
+
+        Thread.sleep(20000);
+    }
+
+    public void cancelOrder(String orderNo) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("mainOrderNo", orderNo);
+        map.put("type", 0);
+        map.put("reasonCode", 99);
+        map.put("reason", "购买重复");
+        map.put("unionId", "US-eufhskaf");
+        map.put("openId", "OIDdkafjslf");
+        TestSimulation.cancelOrderTest(map);
     }
 }

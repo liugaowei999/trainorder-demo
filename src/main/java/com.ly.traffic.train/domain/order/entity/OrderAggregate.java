@@ -2,8 +2,7 @@ package com.ly.traffic.train.domain.order.entity;
 
 import com.alibaba.fastjson.JSON;
 import com.ly.traffic.middleplatform.annotation.ExcludeField;
-import com.ly.traffic.middleplatform.domain.createorder.entity.MainOrder;
-import com.ly.traffic.middleplatform.domain.createorder.repository.ICreateOrderRepository;
+import com.ly.traffic.middleplatform.domain.createorder.entity.UnionOrderEntity;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,7 +17,7 @@ import java.util.List;
  */
 @Getter
 @Setter
-public class OrderAggregate  extends MainOrder implements ICreateOrderRepository {
+public class OrderAggregate  extends UnionOrderEntity {
     private String tQueryKey;
     private Integer aa;
     private Integer bb;
