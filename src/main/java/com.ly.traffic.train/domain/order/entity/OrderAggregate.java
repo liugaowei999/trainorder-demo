@@ -1,6 +1,7 @@
 package com.ly.traffic.train.domain.order.entity;
 
 import com.alibaba.fastjson.JSON;
+import com.ly.traffic.middleplatform.annotation.ExcludeField;
 import com.ly.traffic.middleplatform.domain.createorder.entity.MainOrder;
 import com.ly.traffic.middleplatform.domain.createorder.repository.ICreateOrderRepository;
 import lombok.Data;
@@ -21,6 +22,7 @@ public class OrderAggregate  extends MainOrder implements ICreateOrderRepository
     private String tQueryKey;
     private Integer aa;
     private Integer bb;
+    @ExcludeField
     private Integer cc;
 
 }

@@ -2,9 +2,8 @@ package com.ly.traffic.train.test.createorder;
 import com.ly.traffic.middleplatform.domain.createorder.entity.ResourceConsumerOrder;
 import com.ly.traffic.middleplatform.domain.createorder.entity.RevenueOrderInfo;
 import com.ly.traffic.middleplatform.domain.createorder.entity.TripOrderInfo;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.collect.Lists;
@@ -15,6 +14,7 @@ import com.ly.traffic.middleplatform.domain.createorder.vo.TrainTripInfoVO;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.ly.traffic.middleplatform.domain.createorder.vo.TripInfoVO;
+import com.ly.traffic.middleplatform.test.TestSimulation;
 import com.ly.traffic.train.domain.order.entity.OrderAggregate;
 import com.ly.traffic.train.domain.order.entity.TrainTripOrder;
 import com.ly.traffic.train.domain.order.entity.TrainTripPassengerOrder;
@@ -134,9 +134,34 @@ public class OrderTest {
 
         // 营收商品
         List<RevenueOrderInfo> revenueOrderInfoList = Lists.newArrayList();
+        RevenueOrderInfo revenueOrderInfo1 = new RevenueOrderInfo();
+        revenueOrderInfo1.setGoodsid("16001");
+        revenueOrderInfo1.setGoodscode("SKU-10%_DiSCOUNT_CARD");
+        revenueOrderInfo1.setGoodsname("9折折扣卡");
+        revenueOrderInfo1.setResourcecode("DiSCOUNT_CARD");
+        revenueOrderInfo1.setType(0);
+        revenueOrderInfo1.setMemberid("73836266");
+        revenueOrderInfo1.setStatus(1);
+        revenueOrderInfo1.setBuytime(new Date());
+        revenueOrderInfo1.setCreatetime(new Date());
+        revenueOrderInfo1.setCreateuser("system");
+        revenueOrderInfoList.add(revenueOrderInfo1);
+
 
         // 权益消费申请信息
         List<ResourceConsumerOrder> resourceConsumerOrderList = Lists.newArrayList();
+        ResourceConsumerOrder resourceConsumerOrder1 = new ResourceConsumerOrder();
+        // resourceConsumerOrder1.setTriporderno(""); // 多行程时，指定优惠应用于哪个行程
+        resourceConsumerOrder1.setCardid("3748784");
+        resourceConsumerOrder1.setCardno("377462838");
+        resourceConsumerOrder1.setCardtype(1);
+        resourceConsumerOrder1.setUsestatus(1);
+        resourceConsumerOrder1.setMemberid("73836266");
+        resourceConsumerOrder1.setOccupytime(new Date());
+        resourceConsumerOrder1.setCreatetime(new Date());
+        resourceConsumerOrder1.setCreateuser("system");
+        resourceConsumerOrderList.add(resourceConsumerOrder1);
+
 
         OrderAggregate mainOrder = new OrderAggregate();
         mainOrder.setPlatId(987);
@@ -261,21 +286,21 @@ public class OrderTest {
 
 
         // 行程订单信息
-        TrainTripOrder trainTripOrder = new TrainTripOrder();
-        trainTripOrder.setTripInfoVO(busTripInfoVO);
-        trainTripOrder.setTripPassengerOrderInfoList(tripPassengerOrderInfoList);
-        trainTripOrder.setIndexNo(0);
-        trainTripOrder.setOrderType(1);
-        trainTripOrder.setPayStatus(0);
-        trainTripOrder.setOrderStatus(1);
-        trainTripOrder.setTravelFlag(0);
-        trainTripOrder.setTicketUnitPrice(120.0D);
-        trainTripOrder.setTicketTotalPrice(240.0D);
-        trainTripOrder.setServiceUnitPrice(10.0D);
-        trainTripOrder.setServiceTotalPrice(20.0D);
-        trainTripOrder.setSupplierId("");
-        trainTripOrder.setUnionPay(0);
-        trainTripOrder.setPlanCode("汽车场景code");
+        TrainTripOrder busTripOrder = new TrainTripOrder();
+        busTripOrder.setTripInfoVO(busTripInfoVO);
+        busTripOrder.setTripPassengerOrderInfoList(tripPassengerOrderInfoList);
+        busTripOrder.setIndexNo(0);
+        busTripOrder.setOrderType(1);
+        busTripOrder.setPayStatus(0);
+        busTripOrder.setOrderStatus(1);
+        busTripOrder.setTravelFlag(0);
+        busTripOrder.setTicketUnitPrice(120.0D);
+        busTripOrder.setTicketTotalPrice(240.0D);
+        busTripOrder.setServiceUnitPrice(10.0D);
+        busTripOrder.setServiceTotalPrice(20.0D);
+        busTripOrder.setSupplierId("");
+        busTripOrder.setUnionPay(0);
+        busTripOrder.setPlanCode("汽车场景code");
 
         // 营收商品
         List<RevenueOrderInfo> revenueOrderInfoList = Lists.newArrayList();
@@ -316,7 +341,7 @@ public class OrderTest {
         mainOrder.setCreateUser("system");
         mainOrder.setUpdateDate(new Date());
         mainOrder.setUpdateUser("");
-        mainOrder.setTripOrderInfo(trainTripOrder);
+        mainOrder.setTripOrderInfo(busTripOrder);
         mainOrder.setResourceConsumerOrderList(resourceConsumerOrderList);
         mainOrder.setRevenueOrderInfoList(revenueOrderInfoList);
 
@@ -351,4 +376,14 @@ public class OrderTest {
         System.out.println("tQueryKey=" + mainOrder1.getTQueryKey());
     }
 
+    @Test
+    public void payCallBackTest() throws InterruptedException {
+        Map<String, Object> map = new HashMap<>();
+        map.put("mainOrderNo", "MD1598324298188");
+        map.put("unionPayOrderNo", "Ukfdslal93849");
+        map.put("paySerialNo", "12344sffed");
+        TestSimulation.payCallBackTest(map);
+
+        Thread.sleep(20000);
+    }
 }
