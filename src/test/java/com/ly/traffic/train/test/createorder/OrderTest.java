@@ -290,7 +290,7 @@ public class OrderTest {
         busTripOrder.setTripInfoVO(busTripInfoVO);
         busTripOrder.setTripPassengerOrderInfoList(tripPassengerOrderInfoList);
         busTripOrder.setIndexNo(0);
-        busTripOrder.setOrderType(1);
+        busTripOrder.setOrderType(4);
         busTripOrder.setPayStatus(0);
         busTripOrder.setOrderStatus(1);
         busTripOrder.setTravelFlag(0);
@@ -379,7 +379,7 @@ public class OrderTest {
     @Test
     public void payCallBackTest() throws InterruptedException {
         Map<String, Object> map = new HashMap<>();
-        map.put("mainOrderNo", "MD1598324298188");
+        map.put("mainOrderNo", "MD1598429083479");
         map.put("unionPayOrderNo", "Ukfdslal93849");
         map.put("paySerialNo", "12344sffed");
         TestSimulation.payCallBackTest(map);
