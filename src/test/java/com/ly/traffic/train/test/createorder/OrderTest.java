@@ -163,54 +163,55 @@ public class OrderTest {
         resourceConsumerOrderList.add(resourceConsumerOrder1);
 
 
-        OrderAggregate mainOrder = new OrderAggregate();
-        mainOrder.setPlatId(987);
-        mainOrder.setSourceType(10);
-        mainOrder.setMemberId(5365463);
-        mainOrder.setSupplierOrderNo("");
-        mainOrder.setCheckStatus(0);
-        mainOrder.setOrderStatus(0);
-        mainOrder.setMailStatus(0);
-        mainOrder.setPayStatus(0);
-        mainOrder.setContactName("王五");
-        mainOrder.setContactPhone("13789287372");
-        mainOrder.setContactEmail("wangwu@qq.com");
-        mainOrder.setCustomerTotalAmount(260.0D);
-        mainOrder.setCustomerTotalPaid(0.0D);
-        mainOrder.setTicketTotalPrice(240.0D);
-        mainOrder.setReduceAmount(0.0D);
-        mainOrder.setDiscountAmount(0.0D);
-        mainOrder.setBookFlag(0);
-        mainOrder.setIssueFlag(0);
-        mainOrder.setPayMode(0);
-        mainOrder.setValidPayTime(new Date());
-        mainOrder.setPaymentType(0);
-        mainOrder.setUnionPay(0);
-        mainOrder.setDirectPay(0);
-        mainOrder.setProductType(0);
-        mainOrder.setRefId(123456);
-        mainOrder.setUnionId("USKDFJ-wejfksd");
-        mainOrder.setOpenId("Qjfsdjakfklsdafl");
-        mainOrder.setUserCreateDate(new Date());
-        mainOrder.setCreateDate(new Date());
-        mainOrder.setCreateUser("system");
-        mainOrder.setUpdateDate(new Date());
-        mainOrder.setUpdateUser("");
-        mainOrder.setTripOrderInfo(trainTripOrder);
-        mainOrder.setResourceConsumerOrderList(resourceConsumerOrderList);
-        mainOrder.setRevenueOrderInfoList(revenueOrderInfoList);
+        OrderAggregate orderAggregate = new OrderAggregate();
+        orderAggregate.setPlatId(987);
+        orderAggregate.setSourceType(10);
+        orderAggregate.setMemberId(5365463);
+        orderAggregate.setSupplierOrderNo("");
+        orderAggregate.setCheckStatus(0);
+        orderAggregate.setOrderStatus(0);
+        orderAggregate.setMailStatus(0);
+        orderAggregate.setPayStatus(0);
+        orderAggregate.setContactName("王五");
+        orderAggregate.setContactPhone("13789287372");
+        orderAggregate.setContactEmail("wangwu@qq.com");
+        orderAggregate.setCustomerTotalAmount(260.0D);
+        orderAggregate.setCustomerTotalPaid(0.0D);
+        orderAggregate.setTicketTotalPrice(240.0D);
+        orderAggregate.setReduceAmount(0.0D);
+        orderAggregate.setDiscountAmount(0.0D);
+        orderAggregate.setBookFlag(0);
+        orderAggregate.setIssueFlag(0);
+        orderAggregate.setPayMode(0);
+        orderAggregate.setValidPayTime(new Date());
+        orderAggregate.setPaymentType(0);
+        orderAggregate.setUnionPay(0);
+        orderAggregate.setDirectPay(0);
+        orderAggregate.setProductType(0);
+        orderAggregate.setRefId(123456);
+        orderAggregate.setUnionId("USKDFJ-wejfksd");
+        orderAggregate.setOpenId("Qjfsdjakfklsdafl");
+        orderAggregate.setUserCreateDate(new Date());
+        orderAggregate.setCreateDate(new Date());
+        orderAggregate.setCreateUser("system");
+        orderAggregate.setUpdateDate(new Date());
+        orderAggregate.setUpdateUser("");
+        orderAggregate.setTripOrderInfo(trainTripOrder);
+        orderAggregate.setResourceConsumerOrderList(resourceConsumerOrderList);
+        orderAggregate.setRevenueOrderInfoList(revenueOrderInfoList);
+        orderAggregate.setCustomerNameList(Lists.newArrayList("张三","李四"));
 
-        mainOrder.setTQueryKey("F3:");
-        mainOrder.setOrderNo("MD" + System.currentTimeMillis());
-        mainOrder.setBb(5);
-        mainOrder.setCc(99);
+        orderAggregate.setTQueryKey("F3:");
+        orderAggregate.setOrderNo("MD" + System.currentTimeMillis());
+        orderAggregate.setBb(5);
+        orderAggregate.setCc(99);
 
 
 //        orderRepository.save(mainOrder);
-        mainOrder.save(orderRepository);
+        orderAggregate.save(orderRepository);
 
-        System.out.println("ori:"+JSON.toJSONString(mainOrder));
-        System.out.println(mainOrder.toString());
+        System.out.println("ori:"+JSON.toJSONString(orderAggregate));
+        System.out.println(orderAggregate.toString());
 
         try {
             Thread.sleep(10000L);
@@ -366,20 +367,22 @@ public class OrderTest {
 
     @Test
     public void testQueryOrder() {
-        String byId = orderRepository.getById(23L);
+        String byId = orderRepository.getById(73L);
         Assert.assertFalse("订单不存在！", StringUtils.isEmpty(byId));
 
         OrderAggregate mainOrder1 = JSONObject.parseObject(byId, OrderAggregate.class);
         System.out.println(JSON.toJSONString(mainOrder1));
-        System.out.println("aa=" + mainOrder1.getOrderNo());
+        System.out.println("orderNo=" + mainOrder1.getOrderNo());
+        System.out.println("aa=" + mainOrder1.getAa());
         System.out.println("cc=" + mainOrder1.getCc());
         System.out.println("tQueryKey=" + mainOrder1.getTQueryKey());
+        System.out.println("customerNameList=" + mainOrder1.getCustomerNameList());
     }
 
     @Test
     public void payCallBackTest() throws InterruptedException {
         Map<String, Object> map = new HashMap<>();
-        map.put("mainOrderNo", "MD1598432595926");
+        map.put("mainOrderNo", "MD1598497802298");
         map.put("unionPayOrderNo", "Ukfdslal93849");
         map.put("paySerialNo", "12344sffed");
         TestSimulation.payCallBackTest(map);

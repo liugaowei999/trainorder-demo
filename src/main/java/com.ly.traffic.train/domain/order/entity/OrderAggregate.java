@@ -21,6 +21,7 @@ public class OrderAggregate  extends UnionOrderEntity {
     private String tQueryKey;
     private Integer aa;
     private Integer bb;
+    private List<String> customerNameList;
     @ExcludeField
     private Integer cc;
 
