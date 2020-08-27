@@ -1,4 +1,7 @@
 package com.ly.traffic.train.test.createorder;
+import com.ly.traffic.middleplatform.event.EventType;
+import java.util.Date;
+import com.ly.traffic.middleplatform.condition.streamcontrol.ByPassFlowControlTest;
 import com.ly.traffic.middleplatform.domain.createorder.entity.ResourceConsumerOrder;
 import com.ly.traffic.middleplatform.domain.createorder.entity.RevenueOrderInfo;
 import com.ly.traffic.middleplatform.domain.createorder.entity.TripOrderInfo;
@@ -18,6 +21,8 @@ import com.ly.traffic.middleplatform.test.TestSimulation;
 import com.ly.traffic.train.domain.order.entity.OrderAggregate;
 import com.ly.traffic.train.domain.order.entity.TrainTripOrder;
 import com.ly.traffic.train.domain.order.entity.TrainTripPassengerOrder;
+import com.ly.traffic.train.domain.order.event.TrainOrderEvent;
+import com.ly.traffic.train.domain.order.event.publish.OrderEventPublish;
 import com.ly.traffic.train.domain.order.repository.OrderRepository;
 import com.ly.traffic.train.infrastructure.common.Result;
 import org.apache.commons.lang3.StringUtils;
@@ -41,6 +46,9 @@ import javax.annotation.Resource;
 public class OrderTest {
     @Resource
     private OrderRepository orderRepository;
+
+    @Resource
+    private OrderEventPublish orderEventPublish;
 
     @Test
     public void loopTest() {
@@ -166,7 +174,8 @@ public class OrderTest {
         OrderAggregate orderAggregate = new OrderAggregate();
         orderAggregate.setPlatId(987);
         orderAggregate.setSourceType(10);
-        orderAggregate.setMemberId(5365463);
+//        orderAggregate.setMemberId(5365463); // 单号：中台控制 双号：业务前台控制
+        orderAggregate.setMemberId(5365462); // 单号：中台控制 双号：业务前台控制
         orderAggregate.setSupplierOrderNo("");
         orderAggregate.setCheckStatus(0);
         orderAggregate.setOrderStatus(0);
@@ -213,12 +222,29 @@ public class OrderTest {
         System.out.println("ori:"+JSON.toJSONString(orderAggregate));
         System.out.println(orderAggregate.toString());
 
+        // 发布事件 模拟
+        publishDomainEvent(orderAggregate, EventType.NEW_CREATED);
+
         try {
             Thread.sleep(10000L);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
+    }
+
+    /**
+     * 业务线内控制支付
+     */
+    @Test
+    public void testPublishPayEvent() throws InterruptedException {
+        String orderNo = "MD1598517983390";
+        OrderAggregate orderAggregate = queryOrder(orderNo);
+        Assert.assertFalse("订单不存在！", orderAggregate == null);
+        orderAggregate.setOrderStatus(12);
+        // 发布事件 模拟
+        publishDomainEvent(orderAggregate, EventType.PAID_SUCCESS);
+        Thread.sleep(10000);
     }
 
 
@@ -365,24 +391,47 @@ public class OrderTest {
 
     }
 
-    @Test
-    public void testQueryOrder() {
-        String byId = orderRepository.getById(73L);
-        Assert.assertFalse("订单不存在！", StringUtils.isEmpty(byId));
 
-        OrderAggregate mainOrder1 = JSONObject.parseObject(byId, OrderAggregate.class);
-        System.out.println(JSON.toJSONString(mainOrder1));
-        System.out.println("orderNo=" + mainOrder1.getOrderNo());
-        System.out.println("aa=" + mainOrder1.getAa());
-        System.out.println("cc=" + mainOrder1.getCc());
-        System.out.println("tQueryKey=" + mainOrder1.getTQueryKey());
-        System.out.println("customerNameList=" + mainOrder1.getCustomerNameList());
+
+    private TrainOrderEvent createOrderEventTest(OrderAggregate orderAggregate, EventType eventType) {
+        TrainOrderEvent orderEvent = TrainOrderEvent.create();
+        orderEvent.setEventType(eventType);
+        orderEvent.setOrderNo(orderAggregate.getOrderNo());
+        orderEvent.setTimestamp(new Date());
+        orderEvent.setBypassId(orderAggregate.getMemberId());
+        orderEvent.setDataSnapshot(JSON.toJSONString(orderAggregate));
+
+        return orderEvent;
     }
 
     @Test
+    public void testQueryOrder() {
+        OrderAggregate orderAggregate = queryOrder("MD1598510240450");
+        Assert.assertFalse("订单不存在！", orderAggregate == null);
+
+        System.out.println(JSON.toJSONString(orderAggregate));
+        System.out.println("orderNo=" + orderAggregate.getOrderNo());
+        System.out.println("aa=" + orderAggregate.getAa());
+        System.out.println("cc=" + orderAggregate.getCc());
+        System.out.println("tQueryKey=" + orderAggregate.getTQueryKey());
+        System.out.println("customerNameList=" + orderAggregate.getCustomerNameList());
+    }
+
+    private OrderAggregate queryOrder(String orderNo) {
+        String byId = orderRepository.getByOrderNo(orderNo);
+        OrderAggregate orderAggregate = StringUtils.isNotBlank(byId)? JSONObject.parseObject(byId, OrderAggregate.class) : null;
+        return orderAggregate;
+    }
+
+    /**
+     * 支付回调模拟
+     */
+    @Test
     public void payCallBackTest() throws InterruptedException {
+        String orderNo = "MD1598510240450";
+
         Map<String, Object> map = new HashMap<>();
-        map.put("mainOrderNo", "MD1598497802298");
+        map.put("mainOrderNo", orderNo);
         map.put("unionPayOrderNo", "Ukfdslal93849");
         map.put("paySerialNo", "12344sffed");
         TestSimulation.payCallBackTest(map);
@@ -398,7 +447,7 @@ public class OrderTest {
         Thread.sleep(20000);
     }
 
-    public void cancelOrder(String orderNo) {
+    private void cancelOrder(String orderNo) {
         Map<String, Object> map = new HashMap<>();
         map.put("mainOrderNo", orderNo);
         map.put("type", 0);
@@ -407,5 +456,17 @@ public class OrderTest {
         map.put("unionId", "US-eufhskaf");
         map.put("openId", "OIDdkafjslf");
         TestSimulation.cancelOrderTest(map);
+    }
+
+    /**
+     * 业务线内 控制流程
+     */
+    private void publishDomainEvent(OrderAggregate orderAggregate, EventType eventType) {
+        TrainOrderEvent orderEvent = createOrderEventTest(orderAggregate, eventType);
+        String whoControl = ByPassFlowControlTest.whoControl(orderEvent);
+        if (!"MIDDLE_PLATFORM".equalsIgnoreCase(whoControl)) {
+            System.out.println("============ 业务端控制 流程");
+            orderEventPublish.publish(orderEvent);
+        }
     }
 }

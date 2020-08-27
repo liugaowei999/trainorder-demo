@@ -19,9 +19,9 @@ public class OrderRepository implements IUnionOrderRepository<OrderAggregate, In
 
     @Override
     public Integer save(OrderAggregate orderEntity) {
-        log.info("======= 业务线内 持久化数据 开始==== {}", orderEntity.getOrderNo());
+        log.info("======= 业务线内 持久化数据 开始==== {}\n", orderEntity.getOrderNo());
         try {
-            ProgressBar.printProgress("\n业务线内持久化数据进度:");
+            ProgressBar.printProgress("业务线内持久化数据进度:");
             System.out.println("\n");
         } catch (InterruptedException e) {
             e.printStackTrace();
