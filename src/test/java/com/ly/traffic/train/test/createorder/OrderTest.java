@@ -1,13 +1,11 @@
 package com.ly.traffic.train.test.createorder;
+import com.ly.traffic.middleplatform.demo.streamcontrol.ByPassFlowControlTest;
 import com.ly.traffic.middleplatform.event.EventType;
 import java.util.Date;
-import com.ly.traffic.middleplatform.condition.streamcontrol.ByPassFlowControlTest;
 import com.ly.traffic.middleplatform.domain.createorder.entity.ResourceConsumerOrder;
 import com.ly.traffic.middleplatform.domain.createorder.entity.RevenueOrderInfo;
-import com.ly.traffic.middleplatform.domain.createorder.entity.TripOrderInfo;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 import com.google.common.collect.Lists;
 import com.ly.traffic.middleplatform.domain.createorder.entity.TripPassengerOrderInfo;
@@ -16,7 +14,6 @@ import com.ly.traffic.middleplatform.domain.createorder.vo.TrainTripInfoVO;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.ly.traffic.middleplatform.domain.createorder.vo.TripInfoVO;
 import com.ly.traffic.middleplatform.test.TestSimulation;
 import com.ly.traffic.train.domain.order.entity.OrderAggregate;
 import com.ly.traffic.train.domain.order.entity.TrainTripOrder;
@@ -24,7 +21,6 @@ import com.ly.traffic.train.domain.order.entity.TrainTripPassengerOrder;
 import com.ly.traffic.train.domain.order.event.TrainOrderEvent;
 import com.ly.traffic.train.domain.order.event.publish.OrderEventPublish;
 import com.ly.traffic.train.domain.order.repository.OrderRepository;
-import com.ly.traffic.train.infrastructure.common.Result;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Assert;
