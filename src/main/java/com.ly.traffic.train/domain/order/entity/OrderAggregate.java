@@ -1,9 +1,8 @@
 package com.ly.traffic.train.domain.order.entity;
 
-import com.alibaba.fastjson.JSON;
-import com.ly.traffic.middleplatform.annotation.ExcludeField;
+import com.ly.traffic.middleplatform.apt.annotation.Aggregate;
+import com.ly.traffic.middleplatform.apt.annotation.ExcludeField;
 import com.ly.traffic.middleplatform.domain.createorder.entity.UnionOrderEntity;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +16,7 @@ import java.util.List;
  */
 @Getter
 @Setter
+@Aggregate
 public class OrderAggregate  extends UnionOrderEntity {
     private String tQueryKey;
     private Integer aa;
@@ -24,5 +24,17 @@ public class OrderAggregate  extends UnionOrderEntity {
     private List<String> customerNameList;
     @ExcludeField
     private Integer cc;
+
+    private final static int constantDd = 666;
+
+//    private Integer sourceType;
+
+    public static void main(String[] args) {
+        System.out.println(OrderAggregate.class.getName());
+        System.out.println(OrderAggregate.class.getCanonicalName());
+
+        String ww = String.format("hello %s", "ww");
+        System.out.println(ww);
+    }
 
 }

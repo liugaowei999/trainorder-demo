@@ -64,6 +64,11 @@ public class OrderTest {
      */
     @Test
     public void testCreateTrainOrder() {
+//        createTrainOrder(5365463); // 单号：中台控制 双号：业务前台控制
+        createTrainOrder(5365462); // 单号：中台控制 双号：业务前台控制
+    }
+
+    public void createTrainOrder(Integer memberId) {
         // 行程信息
         TrainTripInfoVO trainTripInfoVO = new TrainTripInfoVO();
         trainTripInfoVO.setTrainNo("G183");
@@ -171,7 +176,7 @@ public class OrderTest {
         orderAggregate.setPlatId(987);
         orderAggregate.setSourceType(10);
 //        orderAggregate.setMemberId(5365463); // 单号：中台控制 双号：业务前台控制
-        orderAggregate.setMemberId(5365462); // 单号：中台控制 双号：业务前台控制
+        orderAggregate.setMemberId(memberId); // 单号：中台控制 双号：业务前台控制
         orderAggregate.setSupplierOrderNo("");
         orderAggregate.setCheckStatus(0);
         orderAggregate.setOrderStatus(0);
