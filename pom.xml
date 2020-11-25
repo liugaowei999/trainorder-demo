@@ -100,7 +100,7 @@
 
         <dependency>
             <groupId>com.ly.traffic.middleplatform</groupId>
-            <artifactId>orderbasejar</artifactId>
+            <artifactId>order-model</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 

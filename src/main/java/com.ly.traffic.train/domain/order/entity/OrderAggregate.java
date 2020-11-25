@@ -21,6 +21,7 @@ public class OrderAggregate  extends UnionOrderEntity {
     private String tQueryKey;
     private Integer aa;
     private Integer bb;
+    @ExcludeField
     private List<String> customerNameList;
     @ExcludeField
     private Integer cc;
@@ -28,13 +29,5 @@ public class OrderAggregate  extends UnionOrderEntity {
     private final static int constantDd = 666;
 
 //    private Integer sourceType;
-
-    public static void main(String[] args) {
-        System.out.println(OrderAggregate.class.getName());
-        System.out.println(OrderAggregate.class.getCanonicalName());
-
-        String ww = String.format("hello %s", "ww");
-        System.out.println(ww);
-    }
 
 }

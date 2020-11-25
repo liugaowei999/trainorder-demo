@@ -407,12 +407,13 @@ public class OrderTest {
 
     @Test
     public void testQueryOrder() {
-        OrderAggregate orderAggregate = queryOrder("MD1598510240450");
+        OrderAggregate orderAggregate = queryOrder("MD1603107433327");
         Assert.assertFalse("订单不存在！", orderAggregate == null);
 
         System.out.println(JSON.toJSONString(orderAggregate));
         System.out.println("orderNo=" + orderAggregate.getOrderNo());
         System.out.println("aa=" + orderAggregate.getAa());
+        System.out.println("bb=" + orderAggregate.getBb());
         System.out.println("cc=" + orderAggregate.getCc());
         System.out.println("tQueryKey=" + orderAggregate.getTQueryKey());
         System.out.println("customerNameList=" + orderAggregate.getCustomerNameList());
@@ -429,7 +430,7 @@ public class OrderTest {
      */
     @Test
     public void payCallBackTest() throws InterruptedException {
-        String orderNo = "MD1598510240450";
+        String orderNo = "MD1603107433327";
 
         Map<String, Object> map = new HashMap<>();
         map.put("mainOrderNo", orderNo);
