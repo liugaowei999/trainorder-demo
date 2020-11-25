@@ -21,6 +21,9 @@ public class OrderAggregate  extends UnionOrderEntity {
     private String tQueryKey;
     private Integer aa;
     private Integer bb;
+    /**
+     * ExcludeField注解标识后，该属性数据不会传送到中台
+     */
     @ExcludeField
     private List<String> customerNameList;
     @ExcludeField
